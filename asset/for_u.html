@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Album</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#fff6a9,#ffd6e8,#c8f7ff);
+    overflow:hidden;
+    transition:0.4s;
+}
+
+/* ✨ SPARKLE BACKGROUND */
+.sparkle{
+    position:fixed;
+    width:6px;
+    height:6px;
+    background:white;
+    border-radius:50%;
+    opacity:0.8;
+    animation:fall linear forwards;
+    z-index:0;
+}
+
+@keyframes fall{
+    to{
+        transform:translateY(100vh);
+        opacity:0;
+    }
+}
+
+/* 💌 LOADING SCREEN */
+.loader{
+    position:fixed;
+    inset:0;
+    background:linear-gradient(135deg,#ffd6e8,#fff6a9);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    z-index:3000;
+}
+
+.loader h2{
+    color:#ff416c;
+    margin-top:20px;
+}
+
+.loader-heart{
+    font-size:50px;
+    animation:beat 1s infinite;
+}
+
+@keyframes beat{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.2);}
+}
+
+/* BLUR EFFECT */
+body.blur-bg .container{
+    filter:blur(8px);
+    transform:scale(0.98);
+}
+
+/* MAIN */
+.container{
+    width:90%;
+    max-width:1400px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    transition:0.4s;
+    position:relative;
+    z-index:1;
+}
+
+.text h1{
+    font-size:80px;
+    font-weight:900;
+    color:white;
+    text-shadow:0 0 20px rgba(255,255,255,0.8);
+}
+
+.text h2{
+    font-size:90px;
+    font-weight:900;
+    background:linear-gradient(45deg,#ff416c,#ff4b2b);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+/* 🫶 QUOTE */
+.quote{
+    margin-top:15px;
+    font-size:18px;
+    color:white;
+    opacity:0.9;
+}
+
+.date{
+    margin-top:25px;
+    padding:12px 35px;
+    background:white;
+    border-radius:40px;
+    font-size:20px;
+    font-weight:600;
+}
+
+/* Tombol Open Letter */
+.letter-btn {
+  margin-top: 20px;
+  padding: 12px 30px;
+  font-size: 18px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff9ecf, #ff6fa5);
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 6px 15px rgba(255, 105, 180, 0.3);
+  transition: all 0.3s ease;
+}
+
+.letter-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(255, 105, 180, 0.5);
+}
+
+/* Overlay */
+.letter-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(6px);
+  z-index: 999;
+}
+
+/* Paper */
+.letter-paper {
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  background: #fffaf5;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  position: relative;
+  overflow-y: auto;
+  animation: letterOpen 0.4s ease forwards;
+  transform: scale(0.9);
+  opacity: 0;
+}
+
+@keyframes letterOpen {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.letter-paper h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #ff6fa5;
+}
+
+.letter-content p {
+  margin: 6px 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #444;
+}
+
+/* Close button */
+.close-letter {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #999;
+}
+
+.close-letter:hover {
+  color: #ff6fa5;
+}
+
+
+/* RIGHT */
+.right{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.circle{
+    width:350px;
+    height:350px;
+    background:white;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    box-shadow:0 20px 50px rgba(0,0,0,0.2);
+}
+
+.circle img{
+    width:250px;
+}
+
+.next-btn{
+    margin-top:25px;
+    padding:12px 40px;
+    border:none;
+    border-radius:40px;
+    font-size:18px;
+    font-weight:700;
+    background:#ff416c;
+    color:white;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.next-btn:hover{
+    transform:scale(1.1);
+}
+
+/* ================= ALBUM ================= */
+
+.album{
+    position:fixed;
+    inset:0;
+    backdrop-filter:blur(6px);
+    background:rgba(0,0,0,0.4);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+}
+
+.album-content{
+    width:900px;
+    max-width:95%;
+    background:white;
+    border-radius:25px;
+    padding:50px 40px 40px 40px;
+    position:relative;
+}
+
+/* CLOSE BUTTON */
+.close-btn{
+    position:absolute;
+    top:15px;
+    right:20px;
+    font-size:28px;
+    font-weight:700;
+    cursor:pointer;
+    color:#ff416c;
+    transition:0.3s;
+}
+
+.close-btn:hover{
+    transform:scale(1.2);
+}
+
+/* GIF */
+.corner-gif{
+    position:absolute;
+    width:70px;
+    height:70px;
+    object-fit:contain;
+    pointer-events:none;
+}
+
+.corner-top-left{ top:10px; left:15px; }
+.corner-bottom-right{ bottom:15px; right:20px; }
+
+/* GRID */
+.page{
+    display:none;
+    grid-template-columns:repeat(2,1fr);
+    gap:25px;
+}
+
+.page.active{ display:grid; }
+
+/* 💗 FOTO HOVER GLOW */
+.photo-frame{
+    width:100%;
+    aspect-ratio:1/1;
+    background:#f3f3f3;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 8px 20px rgba(0,0,0,0.15);
+    transition:0.3s;
+}
+
+.photo-frame:hover{
+    transform:scale(1.05);
+    box-shadow:0 0 25px rgba(255,105,180,0.6);
+}
+
+.photo-frame img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.nav{
+    margin-top:30px;
+    text-align:right;
+}
+
+.nav button{
+    padding:10px 25px;
+    margin-left:10px;
+    border:none;
+    border-radius:30px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.prev{ background:#ccc; }
+.next{ background:#ff416c; color:white; }
+
+/* ❤️ CURSOR TRAIL */
+.heart{
+    position:fixed;
+    font-size:20px;
+    pointer-events:none;
+    animation:float 1s linear forwards;
+    z-index:2000;
+}
+
+@keyframes float{
+    to{
+        transform:translateY(-30px);
+        opacity:0;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<!-- 💌 LOADER -->
+<div class="loader" id="loader">
+    <div class="loader-heart">❤️</div>
+    <h2>Loading something special...</h2>
+</div>
+
+<div class="container">
+
+    <div class="text">
+        <h1>Spesial</h1>
+        <h2>For You</h2>
+        <div class="quote">stay cute forever🫶🐥</div>
+        <div class="date">my beautiful girl</div>
+
+        <button class="letter-btn" onclick="openLetter()">
+            Open Letter 💌
+          </button>
+    </div>
+
+    <div class="right">
+        <div class="circle">
+            <img src="chick.gif">
+        </div>
+        <button class="next-btn" onclick="openAlbum()">Next</button>
+    </div>
+
+</div>
+
+<!-- letter group -->
+  
+  <div class="letter-overlay" id="letterOverlay">
+    <div class="letter-paper">
+      <span class="close-letter" onclick="closeLetter()">✖</span>
+      <h2>For My Beautiful Girl 💖</h2>
+      <div class="letter-content">
+        <p>Haii sayangg ❤️💕 <br>
+            Happy birthday and Happy valentine sayangg, maaff yaa mas ga bisa ngasih apa-apa di hari valentine ini karenaa kendala uang, mungkin ini ga ada apa-apanya buat kamu tapi aku hanya bisa bikin ini di bulan yg istimewa buat kamu, maaf beribu-ribu maaff yaa, aku pernah denger jika tidak bisa membeli maka gunakan otakmu untuk berkreativitas, jadi aku kepikiran buat bikin ini, dengan skill seadanya aku, aku buat ini khusus ke kamu, <br>
+            maaf ya kalo telat, tapi aku selalu doakan kamu semoga menjadi anak yg baik, sholehah, selalu disehatkan, selalu sayang dan nurut ke orang tua, makin cantik, makin pinter, makin rajin yaa sayangg <br>
+            mas minta maaf kalo sering bikin kamu marah, kesel, badmood yaa, maaf kalo slow respond waktu kamu dm di ig yaa, <br>
+            mungkin cuma ini beberapa kata dari aku, mas selalu sayang ke adekk, i always love you babe<br> 
+            love you banyak-banyak sayangku cintaku imutku manisku cantikku duniakuu💕❤️
+        </p>
+      </div>
+    </div>
+  </div>
+  
+<!-- ALBUM -->
+<div class="album" id="album">
+    <div class="album-content">
+
+        <div class="close-btn" onclick="closeAlbum()">✕</div>
+
+        <img src="cute1.gif" class="corner-gif corner-top-left">
+        <img src="cute2.gif" class="corner-gif corner-bottom-right">
+
+        <div class="page active" id="page1">
+            <div class="photo-frame"><img src="novi10.JPG"></div>
+            <div class="photo-frame"><img src="novi11.JPG"></div>
+            <div class="photo-frame"><img src="novi12.png"></div>
+            <div class="photo-frame"><img src="novi13.png"></div>
+        </div>
+
+        <div class="page" id="page2">
+            <div class="photo-frame"><img src="novi14.png"></div>
+            <div class="photo-frame"><img src="novi3.jpg"></div>
+            <div class="photo-frame"><img src="novi20.jpg"></div>
+            <div class="photo-frame"><img src="novi6.JPG"></div>
+        </div>
+
+        <div class="page" id="page3">
+            <div class="photo-frame"><img src="novi7.JPG"></div>
+            <div class="photo-frame"><img src="novi8.JPG"></div>
+            <div class="photo-frame"><img src="novi9.JPG"></div>
+            <div class="photo-frame"><img src="novi.png"></div>
+        </div>
+
+        <div class="nav">
+            <button class="prev" onclick="prevPage()">Prev</button>
+            <button class="next" onclick="nextPage()">Next</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+let currentPage = 1;
+const totalPages = 3;
+
+/* LOADER */
+window.addEventListener("load", function(){
+    setTimeout(()=>{
+        document.getElementById("loader").style.display="none";
+    },2000);
+});
+
+/* SPARKLE */
+setInterval(()=>{
+    const sparkle=document.createElement("div");
+    sparkle.className="sparkle";
+    sparkle.style.left=Math.random()*100+"vw";
+    sparkle.style.animationDuration=(3+Math.random()*3)+"s";
+    document.body.appendChild(sparkle);
+    setTimeout(()=>sparkle.remove(),6000);
+},300);
+
+/* ALBUM */
+function openAlbum(){
+    document.getElementById("album").style.display = "flex";
+    document.body.classList.add("blur-bg");
+}
+
+function closeAlbum(){
+    document.getElementById("album").style.display = "none";
+    document.body.classList.remove("blur-bg");
+}
+
+function showPage(page){
+    for(let i=1;i<=totalPages;i++){
+        document.getElementById("page"+i).classList.remove("active");
+    }
+    document.getElementById("page"+page).classList.add("active");
+}
+
+function nextPage(){
+    if(currentPage < totalPages){
+        currentPage++;
+        showPage(currentPage);
+    }
+}
+
+function prevPage(){
+    if(currentPage > 1){
+        currentPage--;
+        showPage(currentPage);
+    }
+}
+
+/* ❤️ CURSOR */
+document.addEventListener("mousemove", function(e){
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = e.clientX + "px";
+    heart.style.top = e.clientY + "px";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),1000);
+});
+
+function openLetter() {
+  document.getElementById("letterOverlay").style.display = "flex";
+}
+
+function closeLetter() {
+  document.getElementById("letterOverlay").style.display = "none";
+}
+
+</script>
+
+</body>
+</html>
+

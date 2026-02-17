@@ -1,0 +1,14 @@
+h1 {
+    margin-bottom: 30px;
+    font-size: 32px;
+    color: #222; /* lebih gelap */
+}
+
+.taunt {
+    height: 24px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #ff4444;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}

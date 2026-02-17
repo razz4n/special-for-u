@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultimate Mode</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #f0f0f0, #dcdcdc);
+    overflow: hidden;
+}
+
+/* CARD */
+.container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    background: white;
+    padding: 50px 60px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+/* TAUNT TEXT */
+.taunt {
+    height: 24px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #ff3b3b;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* QUESTION */
+h1 {
+    margin-bottom: 30px;
+    font-size: 32px;
+    color: #111;
+}
+
+/* BUTTONS */
+button {
+    padding: 12px 30px;
+    font-size: 16px;
+    margin: 10px;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: transform 0.2s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+#ya {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#tidak {
+    background-color: #f44336;
+    color: white;
+    position: absolute;
+    transition: left 0.25s ease, top 0.25s ease, transform 0.25s ease;
+}
+
+/* THANK YOU PAGE */
+.thankyou {
+    display: none;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    font-size: 42px;
+    font-weight: bold;
+    animation: fadeZoom 0.8s ease forwards;
+}
+
+@keyframes fadeZoom {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* NOTIF BOUNCE */
+.notif {
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #111;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 12px;
+    font-size: 16px;
+    z-index: 100;
+}
+
+.notif.show {
+    animation: bounce 0.8s ease forwards;
+}
+
+@keyframes bounce {
+    0% { top: -100px; }
+    60% { top: 30px; }
+    80% { top: 15px; }
+    100% { top: 20px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="notif" id="notif">Love you banyak2🫶</div>
+
+<div class="container" id="page1">
+    <div class="card">
+        <div id="taunt" class="taunt"></div>
+        <h1>Kamu sayang aku ga?❤️</h1>
+        <button id="ya">Ya</button>
+        <button id="tidak">Tidak</button>
+    </div>
+</div>
+
+<div class="thankyou" id="page2">
+    <p>aku tau kalo kamu sayang aku hahaa❤️💕💕 <br>
+        <button><a href="asset/for_u.html">i have somethink for you</a></button>
+    </p>
+    
+</div>
+
+<script>
+const tidakBtn = document.getElementById("tidak");
+const yaBtn = document.getElementById("ya");
+const page1 = document.getElementById("page1");
+const page2 = document.getElementById("page2");
+const notif = document.getElementById("notif");
+const taunt = document.getElementById("taunt");
+
+const messages = [
+    "tidak kena :P",
+    "ga boleh",
+    "harus jawab ya!",
+    "jangan laa",
+    "kejar aja terus wlee",
+    "ga bakal bisa ya",
+    "hahahaa ga kena yaa"
+];
+
+let tauntTimeout;
+
+/* FUNCTION TOMBOL KABUR */
+function kabur() {
+    const maxX = window.innerWidth - tidakBtn.offsetWidth;
+    const maxY = window.innerHeight - tidakBtn.offsetHeight;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+    const rotate = Math.random() * 40 - 20;
+
+    tidakBtn.style.left = x + "px";
+    tidakBtn.style.top = y + "px";
+    tidakBtn.style.transform = `rotate(${rotate}deg)`;
+
+    showTaunt();
+}
+
+/* TAUNT RANDOM */
+function showTaunt() {
+    const randomText = messages[Math.floor(Math.random() * messages.length)];
+    taunt.textContent = randomText;
+    taunt.style.opacity = "1";
+
+    clearTimeout(tauntTimeout);
+    tauntTimeout = setTimeout(() => {
+        taunt.style.opacity = "0";
+    }, 3000);
+}
+
+tidakBtn.addEventListener("mouseenter", kabur);
+tidakBtn.addEventListener("mousemove", kabur);
+
+/* TOMBOL YA */
+yaBtn.addEventListener("click", () => {
+    page1.style.display = "none";
+    page2.style.display = "flex";
+
+    notif.classList.add("show");
+
+    setTimeout(() => {
+        notif.style.top = "-100px";
+    }, 3000);
+});
+</script>
+
+</body>
+</html>
